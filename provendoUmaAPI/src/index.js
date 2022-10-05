@@ -9,7 +9,7 @@ const rotas = express.Router();
 
 //
 rotas.get('/', (req, res) => {
-    res.send('Rota inicial do servidro')
+    res.send('Rota inicial do servidor')
 })
 
 let infoPokemon = []
@@ -33,6 +33,45 @@ rotas.get('/pokemon/:nome', (req, res) => {
     return res.status(200).json(infoPokemon)
 });
 
+let regioesPokemon = []
+
+rotas.get('/regioes', (req, res) => {
+    const regioes = req.params.regioes;
+    async function getRegioesPokemon(){  
+        try{
+            regioesPokemon = await db.query(
+                `SELECT id, nome FROM pokemon.regioes;`
+            );
+            console.log(regioesPokemon)
+            return regioesPokemon;              
+        } catch (error){
+            console.log(error);
+       }
+    }
+    getRegioesPokemon();
+    db.end();
+    return res.status(200).json(regioesPokemon)
+});
+
+let tiposPokemon = []
+
+rotas.get('/tipos', (req, res) => {
+    const tipos = req.params.tipos;
+    async function getTiposPokemon(){
+        try{
+            tiposPokemon = await db.query(
+                `SELECT id, nome FROM pokemon.tipos;`
+            );
+            console.log(tiposPokemon)
+            return tiposPokemon;
+        } catch (error){
+            console.log(error);
+        }
+    }
+    getTiposPokemon();
+    db.end();
+    return res.status(200).json(tiposPokemon)
+})
 
 
 
